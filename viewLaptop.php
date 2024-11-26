@@ -1,9 +1,11 @@
 <?php
 require_once 'dbconnect.php';
-$sql = 'select * from brand';
+$sql = 'select l.laptop_id,b.brand_name as brand,l.model,l.ram,l.cpu,l.hdd, l.display,l.color,l.year,l.filepath
+from laptop l, brand b
+where l.brand=b.brand_id;';
 try {
     $stmt = $conn->query($sql);
-    $brands = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $laptops = $stmt->fetchAll(PDO::FETCH_ASSOC);
     // print_r($brand);
 } catch (PDOException $e) {
     echo $e->getMessage();
@@ -20,7 +22,7 @@ try {
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-    <title>Hello, world!</title>
+    <title>View Laptop</title>
 </head>
 
 <body>
@@ -72,24 +74,38 @@ try {
             </div>
             <div class="col-md-10 col-sm-12">
 
-                <h3 class="bg-red text-center">Brand Information</h3>
+                <h3 class="bg-red text-center">Laptop Information</h3>
 
                 <table class="table table-striped table-hover">
                     <thead>
                         <tr>
-                            <th>Brand ID</th>
+                            <th>Laptop ID</th>
                             <th>Brand Name</th>
-                            <th>Country</th>
+                            <th>Model</th>
+                            <th>Ram</th>
+                            <th>CPU</th>
+                            <th>HDD</th>
+                            <th>Display</th>
+                            <th>Color</th>
+                            <th>Year</th>
+                            <th>Image</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-                        if (isset($brands)) {
-                            foreach ($brands as $brand) {
+                        if (isset($laptops)) {
+                            foreach ($laptops as $laptop) {
                                 echo "<tr>
-                                        <td>$brand[brand_id]</td>
-                                        <td>$brand[brand_name]</td>
-                                        <td>$brand[country]</td>
+                                        <td>$laptop[laptop_id]</td>
+                                        <td>$laptop[brand]</td>
+                                        <td>$laptop[model]</td>
+                                        <td>$laptop[ram]</td>
+                                        <td>$laptop[cpu]</td>
+                                        <td>$laptop[hdd]</td>
+                                        <td>$laptop[display]</td>
+                                        <td>$laptop[model]</td>
+                                        <td>$laptop[year]</td>
+                                        <td><img src=$laptop[filepath] style='height:100px;width:100px;'></td>
                                 </tr>";
                             }
                         }
