@@ -1,5 +1,8 @@
 <?php
 require_once 'dbconnect.php';
+if (!isset($_SESSION)) {
+    session_start();
+}
 if (isset($_POST['submit']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
     echo ' on the server';
     $brand = $_POST['brand'];
@@ -8,7 +11,9 @@ if (isset($_POST['submit']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
     try {
         $stmt = $conn->prepare($sql);
         $status = $stmt->execute([$brand, $country]);
+        $brandId = $conn->lastInsertId();
         if ($status) {
+            $_SESSION['insertBrandSuccess'] = "New Laptop with id no $brandId has been inserted.";
             header('location:viewBrand.php');
         } else {
             echo 'false';

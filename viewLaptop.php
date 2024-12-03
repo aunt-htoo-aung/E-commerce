@@ -1,5 +1,8 @@
 <?php
 require_once 'dbconnect.php';
+if (!isset($_SESSION)) {
+    session_start();
+}
 $sql = 'select l.laptop_id,b.brand_name as brand,l.model,l.ram,l.cpu,l.hdd, l.display,l.color,l.year,l.filepath
 from laptop l, brand b
 where l.brand=b.brand_id;';
@@ -74,8 +77,17 @@ try {
             </div>
             <div class="col-md-10 col-sm-12">
 
-                <h3 class="bg-red text-center">Laptop Information</h3>
-
+                <h3 class="text-center">Laptop Information</h3>
+                <p><?php
+                    if (isset($_SESSION['insertSuccess'])) {
+                        echo "<span class='alert alert-success'>$_SESSION[insertSuccess]</span>";
+                        unset($_SESSION['insertSuccess']);
+                    }
+                    if (isset($_SESSION['deleteLaptopSuccess'])) {
+                        echo "<span class='alert alert-success'>$_SESSION[deleteLaptopSuccess]</span>";
+                        unset($_SESSION['deleteLaptopSuccess']);
+                    }
+                    ?></p>
                 <table class="table table-striped table-hover">
                     <thead>
                         <tr>
@@ -106,6 +118,12 @@ try {
                                         <td>$laptop[model]</td>
                                         <td>$laptop[year]</td>
                                         <td><img src=$laptop[filepath] style='height:100px;width:100px;'></td>
+                                        <td>
+                                            <a class='btn btn-primary' href='editLaptop.php?id=$laptop[laptop_id]'>Edit</a>
+                                        </td>
+                                        <td>
+                                            <a class='btn btn-danger' href='deleteLaptop.php?id=$laptop[laptop_id]'>Delete</a>
+                                        </td>
                                 </tr>";
                             }
                         }

@@ -1,5 +1,8 @@
 <?php
 require_once 'dbconnect.php';
+if (!isset($_SESSION)) {
+    session_start();
+}
 $sql = 'select * from brand';
 try {
     $stmt = $conn->query($sql);
@@ -73,7 +76,11 @@ try {
             <div class="col-md-10 col-sm-12">
 
                 <h3 class="bg-red text-center">Brand Information</h3>
-
+                <p><?php
+                    if (isset($_SESSION['insertBrandSuccess'])) {
+                        echo "<span class='alert alert-success'>$_SESSION[insertBrandSuccess]</span>";
+                    }
+                    ?></p>
                 <table class="table table-striped table-hover">
                     <thead>
                         <tr>
@@ -90,6 +97,12 @@ try {
                                         <td>$brand[brand_id]</td>
                                         <td>$brand[brand_name]</td>
                                         <td>$brand[country]</td>
+                                        <td>
+                                            <a class='btn btn-primary' href='editBrand.php?bid=$brand[brand_id]'>Edit</a>
+                                        </td>
+                                        <td>
+                                            <a class='btn btn-danger' href='deleteBrand.php?bid=$brand[brand_id]'>Delete</a>
+                                        </td>
                                 </tr>";
                             }
                         }

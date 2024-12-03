@@ -1,5 +1,8 @@
 <?php
 require_once 'dbconnect.php';
+if (!isset($_SESSION)) {
+    session_start();
+}
 try {
     $sql = "select * from brand";
     $stmt = $conn->query($sql);
@@ -25,8 +28,9 @@ if (isset($_POST['submit']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
     try {
         $stmt = $conn->prepare($sql);
         $status = $stmt->execute([$brand, $model, $ram, $cpu, $hdd, $display, $color, $year, $coverpath]);
+        $laptopId = $conn->lastInsertId();
         if ($status) {
-            echo "insert successful";
+            $_SESSION['insertSuccess'] = "New Laptop with id no $laptopId has been inserted.";
             header('location:viewLaptop.php');
         } else {
             echo 'false';
@@ -105,7 +109,7 @@ if (isset($_POST['submit']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 <h3 class="bg-light text-center">Insert New Laptop</h3>
 
-                <div class="col-lg-6 mb-3">
+                <div class="col-lg-12 mb-3" style="display: flex; justify-content:center;">
                     <form method="post" action="<?php echo $_SERVER['PHP_SELF'] ?>" enctype="multipart/form-data">
                         <select class="form-select mb-3" name="brand">
                             <option selected>Choose Brand</option>
@@ -119,37 +123,45 @@ if (isset($_POST['submit']) && $_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
                         </select>
-                        <div class="mb-3">
-                            <label for="model" class="form-label">Model</label>
-                            <input type="text" class="form-control" name="model">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="model" class="form-label">Model</label>
+                                <input type="text" class="form-control" name="model">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="ram" class="form-label">RAM</label>
+                                <input type="text" class="form-control" name="ram">
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="ram" class="form-label">RAM</label>
-                            <input type="text" class="form-control" name="ram">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="cpu" class="form-label">CPU</label>
+                                <input type="text" class="form-control" name="cpu">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="hdd" class="form-label">HDD</label>
+                                <input type="text" class="form-control" name="hdd">
+                            </div>
                         </div>
-                        <div class=" mb-3">
-                            <label for="cpu" class="form-label">CPU</label>
-                            <input type="text" class="form-control" name="cpu">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="display" class="form-label">Display</label>
+                                <input type="text" class="form-control" name="display">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="color" class="form-label">Colour</label>
+                                <input type="text" class="form-control" name="color">
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label for="hdd" class="form-label">HDD</label>
-                            <input type="text" class="form-control" name="hdd">
-                        </div>
-                        <div class="mb-3">
-                            <label for="display" class="form-label">Display</label>
-                            <input type="text" class="form-control" name="display">
-                        </div>
-                        <div class="mb-3">
-                            <label for="color" class="form-label">Colour</label>
-                            <input type="text" class="form-control" name="color">
-                        </div>
-                        <div class="mb-3">
-                            <label for="year" class="form-label">Year</label>
-                            <input type="number" class="form-control" name="year">
-                        </div>
-                        <div class="mb-3">
-                            <label for="filepath" class="form-label">Laptop Image</label>
-                            <input type="file" class="form-control" name="laptop_img">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="year" class="form-label">Year</label>
+                                <input type="number" class="form-control" name="year">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="filepath" class="form-label">Laptop Image</label>
+                                <input type="file" class="form-control" name="laptop_img">
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-primary" name="submit">Submit</button>
                     </form>
