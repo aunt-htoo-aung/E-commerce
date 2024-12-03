@@ -87,6 +87,10 @@ try {
                         echo "<span class='alert alert-success'>$_SESSION[deleteLaptopSuccess]</span>";
                         unset($_SESSION['deleteLaptopSuccess']);
                     }
+                    if (isset($_SESSION['updateSuccess'])) {
+                        echo "<span class='alert alert-success'>$_SESSION[updateSuccess]</span>";
+                        unset($_SESSION['updateSuccess']);
+                    }
                     ?></p>
                 <table class="table table-striped table-hover">
                     <thead>
